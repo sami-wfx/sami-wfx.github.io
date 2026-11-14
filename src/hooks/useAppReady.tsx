@@ -1,24 +1,25 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useSyncExternalStore } from "react";
 
 const AppReadyContext = createContext<boolean>(false);
-const SetAppReadyContext = createContext<(ready: boolean) => void>(() => {});
 
+const subscribe = () => () => {};
+
+/**
+ * Flips to ready right after hydration (there is no splash screen any more):
+ * the server snapshot is `false`, the client snapshot is `true`.
+ */
 export function AppReadyProvider({ children }: { children: React.ReactNode }) {
-  const [ready, setReady] = useState(false);
-  return (
-    <SetAppReadyContext value={setReady}>
-      <AppReadyContext value={ready}>{children}</AppReadyContext>
-    </SetAppReadyContext>
+  const ready = useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false
   );
+  return <AppReadyContext value={ready}>{children}</AppReadyContext>;
 }
 
-/** True once the preloader has begun revealing the page. Drives entrance animations. */
+/** True once the page has hydrated. Drives entrance animations. */
 export function useAppReady() {
   return useContext(AppReadyContext);
-}
-
-export function useSetAppReady() {
-  return useContext(SetAppReadyContext);
 }

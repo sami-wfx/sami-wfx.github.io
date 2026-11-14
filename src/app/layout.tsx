@@ -7,7 +7,6 @@ import { CursorProvider } from "@/hooks/useCursor";
 import { AppReadyProvider } from "@/hooks/useAppReady";
 import { LanguageProvider } from "@/hooks/useLanguage";
 import { SmoothScroll } from "@/components/SmoothScroll";
-import { Preloader } from "@/components/Preloader";
 import { Grain } from "@/components/ui/Grain";
 import { Vignette } from "@/components/ui/Vignette";
 import { Navbar } from "@/components/Navbar";
@@ -122,7 +121,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <AppReadyProvider>
             <CursorProvider>
               <SmoothScroll>
-                <Preloader />
                 <Grain />
                 <Vignette />
                 <Navbar />
