@@ -1,0 +1,195 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #020010;
+  --color-surface: #120b23;
+  --color-surface-2: #180f30;
+  --color-ink: #f4f5fa;
+  --color-ink-dim: #9196aa;
+  --color-ink-faint: rgba(244, 245, 250, 0.32);
+  --color-line: rgba(145, 150, 170, 0.15);
+  --color-chrome-1: #eceeff;
+  --color-chrome-2: #a5a9c4;
+  --color-chrome-3: #4a4d6a;
+
+  --color-accent: #7357ff;
+  --color-accent-bright: #8b5cff;
+  --color-accent-blue: #4776ff;
+  --color-accent-blue-light: #6e9cff;
+  --color-accent-ink: #f4f5fa;
+
+  --font-sans: var(--font-geist-sans), "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-archivo-black), var(--font-geist-sans), sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+
+  --breakpoint-xs: 23.4375rem;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    background: var(--color-bg);
+    color-scheme: dark;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    /* Grayscale AA avoids RGB subpixel fringing on text that sits in a
+       GPU-composited (transform/will-change) layer, common with our
+       hover/reveal transitions. */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Scene system: "raised"/"deep" used to each carry their own slightly
+     different --color-bg (a touch lighter / darker than the site
+     default), which read as a visible shift while scrolling between
+     sections. Per request, every scene now shares the exact same
+     --color-bg (the root default, #0a0611, inherited — not redeclared
+     here) — only --color-surface/-2 (card/panel tones within a section)
+     still vary by tier, since those aren't "the background". */
+  [data-scene="raised"] {
+    --color-surface: #191129;
+    --color-surface-2: #211733;
+    background: var(--color-bg);
+    color: var(--color-ink);
+  }
+
+  [data-scene="deep"] {
+    --color-surface: #100826;
+    --color-surface-2: #160d30;
+    background: var(--color-bg);
+    color: var(--color-ink);
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: #f4f5fa;
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-accent-blue-light);
+    outline-offset: 4px;
+  }
+
+  a,
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .mask-reveal {
+    overflow: clip;
+  }
+
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--color-ink);
+  }
+
+  .chrome-text {
+    background-image: linear-gradient(
+      100deg,
+      #7f85a8 0%,
+      #dfe2f5 15%,
+      #ffffff 30%,
+      #8f93b8 42%,
+      #eef0fb 55%,
+      #c3c8ea 68%,
+      #ffffff 82%,
+      #9297bd 100%
+    );
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .glass-panel {
+    background: rgba(20, 15, 42, 0.42);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(139, 92, 255, 0.24);
+    box-shadow:
+      0 0 46px rgba(115, 87, 255, 0.14),
+      0 0 20px rgba(233, 79, 245, 0.06);
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes kenburns {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+@keyframes recPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes grain {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-2%, 1%);
+  }
+  50% {
+    transform: translate(1%, -2%);
+  }
+  75% {
+    transform: translate(-1%, 2%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
