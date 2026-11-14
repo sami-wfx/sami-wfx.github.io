@@ -76,6 +76,8 @@ export function ShowreelCard({ play }: { play: "hidden" | "show" }) {
           <video
             className="h-full w-full object-cover"
             src="/videos/showreel.mp4"
+            poster="/images/reel-poster.jpg"
+            style={{ background: BG }}
             autoPlay
             muted
             loop

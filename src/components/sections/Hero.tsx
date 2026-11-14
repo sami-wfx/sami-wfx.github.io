@@ -372,7 +372,10 @@ export function Hero() {
               a backstop for widths in between, not the primary mechanism. */}
         <div className="grid w-full grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(480px,1fr)_clamp(320px,38vw,640px)] lg:gap-[clamp(60px,6vw,100px)]">
           {/* ------------------------- текст ------------------------- */}
-          <div className="order-1 min-w-0">
+          {/* relative z-10: the headline/badge halos (drop-shadow / box-shadow)
+              must paint OVER the showreel video, not under it — otherwise
+              its opaque square cuts them off and the square edge shows. */}
+          <div className="relative z-10 order-1 min-w-0">
             {/* Badge is back overlapping the headline's corner — the last
                 four attempts at this all broke because the badge kept
                 colliding with the eyebrow line that used to sit directly
