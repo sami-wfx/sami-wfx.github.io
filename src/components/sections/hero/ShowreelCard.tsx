@@ -60,7 +60,7 @@ export function ShowreelCard({ play }: { play: "hidden" | "show" }) {
     <motion.div
       initial={reduce ? false : { opacity: 0, y: 26, scale: 0.96 }}
       animate={play === "show" ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 26, scale: 0.96 }}
-      transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
       className="relative mx-auto w-full sm:w-[min(100%,840px)] lg:mx-0 lg:w-[clamp(320px,38vw,640px)]"
       style={{ aspectRatio: "4 / 5" }}
     >
@@ -89,12 +89,23 @@ export function ShowreelCard({ play }: { play: "hidden" | "show" }) {
           {/* hairline feather absorbing H.264 compression noise right at
               the video's real top/bottom edge — see comment above */}
           <div
-            className="pointer-events-none absolute inset-x-0 top-0 h-[3%]"
+            className="pointer-events-none absolute inset-x-0 top-0 h-[6%]"
             style={{ background: `linear-gradient(${BG}, transparent)` }}
           />
           <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-[3%]"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-[6%]"
             style={{ background: `linear-gradient(transparent, ${BG})` }}
+          />
+          {/* same on the left/right edges: any tiny colour difference between the
+              decoded video and the page background becomes a soft gradient
+              instead of a visible square edge */}
+          <div
+            className="pointer-events-none absolute inset-y-0 left-0 w-[6%]"
+            style={{ background: `linear-gradient(90deg, ${BG}, transparent)` }}
+          />
+          <div
+            className="pointer-events-none absolute inset-y-0 right-0 w-[6%]"
+            style={{ background: `linear-gradient(270deg, ${BG}, transparent)` }}
           />
         </div>
       </div>

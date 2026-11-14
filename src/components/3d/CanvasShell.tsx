@@ -10,16 +10,20 @@ export function CanvasShell({
   className,
   cameraPosition = [0, 0, 5.4],
   fov = 32,
+  paused = false,
 }: {
   children: React.ReactNode;
   className?: string;
   cameraPosition?: [number, number, number];
   fov?: number;
+  /** Stops the render loop (e.g. while the canvas is scrolled out of view). */
+  paused?: boolean;
 }) {
-  const [frameloop, setFrameloop] = useState<"always" | "never">("always");
+  const [tabHidden, setTabHidden] = useState(false);
+  const frameloop: "always" | "never" = tabHidden || paused ? "never" : "always";
 
   useEffect(() => {
-    const onVis = () => setFrameloop(document.hidden ? "never" : "always");
+    const onVis = () => setTabHidden(document.hidden);
     document.addEventListener("visibilitychange", onVis);
     return () => document.removeEventListener("visibilitychange", onVis);
   }, []);
@@ -33,7 +37,7 @@ export function CanvasShell({
     <Canvas
       className={cn("!touch-auto", className)}
       frameloop={frameloop}
-      dpr={[1, 1.75]}
+      dpr={[1, 1.5]}
       gl={{ antialias: true, powerPreference: "high-performance", alpha: true }}
       camera={{ position: cameraPosition, fov }}
       onCreated={handleCreated}

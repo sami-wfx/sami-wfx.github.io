@@ -53,8 +53,8 @@ function useJsReady() {
 }
 
 const badgeReveal: Variants = {
-  hidden: { opacity: 0, y: 10, scale: 0.97, filter: "blur(4px)" },
-  show: (delay: number = 0) => ({ opacity: 1, y: 0, scale: 1, filter: "blur(0px)", transition: { duration: 0.6, delay, ease: EASE_OUT } }),
+  hidden: { opacity: 0, y: 10, scale: 0.97 },
+  show: (delay: number = 0) => ({ opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, delay, ease: EASE_OUT } }),
 };
 
 // Sticker entrance (п.14): flies in rotated further than its resting -4deg
@@ -72,29 +72,28 @@ const badgeReveal: Variants = {
 // below the headline has no such magic numbers to get wrong: rotate is
 // the only transform left, everything else is just margin.
 const stickerReveal: Variants = {
-  hidden: { opacity: 0, rotate: -22, scale: 0.9, filter: "blur(4px)" },
+  hidden: { opacity: 0, rotate: -22, scale: 0.9 },
   show: {
     opacity: 1,
     rotate: -9,
     scale: 1,
-    filter: "blur(0px)",
-    transition: { type: "spring", stiffness: 300, damping: 15, mass: 0.8, opacity: { duration: 0.3 }, filter: { duration: 0.3 } },
+    transition: { type: "spring", stiffness: 300, damping: 15, mass: 0.8, opacity: { duration: 0.25 } },
   },
 };
 
 const descReveal: Variants = {
   hidden: { opacity: 0, y: 16 },
-  show: (delay: number) => ({ opacity: 1, y: 0, transition: { duration: 0.7, delay, ease: EASE_OUT } }),
+  show: (delay: number) => ({ opacity: 1, y: 0, transition: { duration: 0.45, delay, ease: EASE_OUT } }),
 };
 
 const buttonReveal: Variants = {
-  hidden: { opacity: 0, y: 14, filter: "blur(2px)" },
-  show: (delay: number) => ({ opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.6, delay, ease: EASE_OUT } }),
+  hidden: { opacity: 0, y: 14 },
+  show: (delay: number) => ({ opacity: 1, y: 0, transition: { duration: 0.4, delay, ease: EASE_OUT } }),
 };
 
 const statReveal: Variants = {
   hidden: { opacity: 0, y: 12 },
-  show: (delay: number) => ({ opacity: 1, y: 0, transition: { duration: 0.55, delay, ease: EASE_OUT } }),
+  show: (delay: number) => ({ opacity: 1, y: 0, transition: { duration: 0.4, delay, ease: EASE_OUT } }),
 };
 
 const swapVariants: Variants = {
@@ -395,7 +394,7 @@ export function Hero() {
               }}
             >
               <span className="relative inline-block text-white" style={{ filter: "drop-shadow(0 8px 34px rgba(245,243,255,0.22))" }}>
-                <HeadlineReveal text={t.hero.headline.primary} play={play} baseDelay={0.1} uppercase />
+                <HeadlineReveal text={t.hero.headline.primary} play={play} baseDelay={0.03} uppercase />
 
                 {/* бейдж — abs positioned off THIS span (line 1), which
                     `useTilt`-style shrink-wraps via `inline-block` to the
@@ -455,7 +454,7 @@ export function Hero() {
                 <HeadlineReveal
                   text={t.hero.headline.accent}
                   play={play}
-                  baseDelay={0.18}
+                  baseDelay={0.08}
                   uppercase
                   wordStyle={{
                     backgroundImage: HEADLINE_GRADIENT,
@@ -472,7 +471,7 @@ export function Hero() {
 
             <motion.div
               variants={descReveal}
-              custom={0.35}
+              custom={0.15}
               initial={initial("hidden")}
               animate={play}
               className="mt-[22px] flex max-w-[560px] flex-col gap-4"
@@ -485,10 +484,10 @@ export function Hero() {
             </motion.div>
 
             <div className="mt-[30px] flex flex-col items-start gap-4">
-              <motion.div variants={buttonReveal} custom={0.43} initial={initial("hidden")} animate={play} className="w-full max-w-[420px]">
+              <motion.div variants={buttonReveal} custom={0.2} initial={initial("hidden")} animate={play} className="w-full max-w-[420px]">
                 <MagneticCTA href="#work" icon="▶" text={t.hero.ctaPortfolio} reduce={reduce} hoverProps={portfolioHover} />
               </motion.div>
-              <motion.div variants={buttonReveal} custom={0.5} initial={initial("hidden")} animate={play}>
+              <motion.div variants={buttonReveal} custom={0.25} initial={initial("hidden")} animate={play}>
                 <Link
                   href="#contact"
                   {...contactHover}
@@ -516,7 +515,7 @@ export function Hero() {
             без pill-фона; цифры статистики отдельной строкой под ним. */}
         <motion.div
           variants={badgeReveal}
-          custom={0.5}
+          custom={0.28}
           initial={initial("hidden")}
           animate={play}
           className="mt-[40px] flex items-center gap-2.5 lg:mt-[52px]"
@@ -542,7 +541,7 @@ export function Hero() {
               <motion.span
                 key={i}
                 variants={statReveal}
-                custom={0.56 + i * 0.06}
+                custom={0.3 + i * 0.04}
                 initial={initial("hidden")}
                 animate={play}
                 className={cn("flex items-center gap-3", i === 2 && "max-lg:basis-full")}
@@ -563,7 +562,7 @@ export function Hero() {
                       WebkitTextStroke: "0.5px rgba(0,0,0,0.35)",
                     }}
                   >
-                    <StatNumber value={s.value} start={play === "show"} delayMs={700} />
+                    <StatNumber value={s.value} start={play === "show"} delayMs={250} />
                   </span>
                   <span className="font-mono text-[10px] tracking-[0.12em] uppercase" style={{ color: MUTED, opacity: 0.55 }}>
                     {s.label}

@@ -12,12 +12,14 @@ const PR_POS: [number, number, number] = [1.45, -0.22, 0];
 export function ToolkitScene({
   progressRef,
   reducedMotion = false,
+  paused = false,
 }: {
   progressRef: React.RefObject<{ value: number }>;
   reducedMotion?: boolean;
+  paused?: boolean;
 }) {
   return (
-    <CanvasShell className="!absolute inset-0 h-full w-full" cameraPosition={[0, 0, 6.4]} fov={34}>
+    <CanvasShell className="!absolute inset-0 h-full w-full" cameraPosition={[0, 0, 6.4]} fov={34} paused={paused}>
       <StudioEnvironment />
 
       <ChromeLogo

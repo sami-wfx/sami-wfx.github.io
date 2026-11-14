@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { RevealText } from "@/components/ui/RevealText";
 import { AE_CAPABILITY_KEYS, PR_CAPABILITY_KEYS } from "@/data/toolkit";
@@ -80,7 +80,27 @@ export function Software() {
   const isMobile = useIsMobile();
   const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
+  const sceneBoxRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef({ value: 0 });
+  // The WebGL scene is mounted only once its box is near the viewport (so the
+  // three.js bundle + GPU context don't cost anything during the hero), and its
+  // render loop is paused whenever the box is scrolled out of view.
+  const [sceneMounted, setSceneMounted] = useState(false);
+  const [sceneVisible, setSceneVisible] = useState(false);
+
+  useEffect(() => {
+    const el = sceneBoxRef.current;
+    if (!el || isMobile || reducedMotion) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        setSceneVisible(entry.isIntersecting);
+        if (entry.isIntersecting) setSceneMounted(true);
+      },
+      { rootMargin: "800px 0px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [isMobile, reducedMotion]);
 
   useEffect(() => {
     if (!sectionRef.current || reducedMotion || isMobile) return;
@@ -116,8 +136,12 @@ export function Software() {
         <div className="relative mt-16 grid grid-cols-1 items-center gap-14 md:grid-cols-[1fr_1.3fr_1fr]">
           <CapabilityList title={t.software.ae.name} items={aeItems} align="left" />
 
-          <div className="relative order-first h-[280px] sm:h-[360px] md:order-none md:h-[440px]">
-            {isMobile ? <ToolkitFallback /> : <ToolkitScene progressRef={progressRef} reducedMotion={reducedMotion} />}
+          <div ref={sceneBoxRef} className="relative order-first h-[280px] sm:h-[360px] md:order-none md:h-[440px]">
+            {isMobile ? (
+              <ToolkitFallback />
+            ) : sceneMounted || reducedMotion ? (
+              <ToolkitScene progressRef={progressRef} reducedMotion={reducedMotion} paused={!reducedMotion && !sceneVisible} />
+            ) : null}
           </div>
 
           <CapabilityList title={t.software.pr.name} items={prItems} align="right" />
